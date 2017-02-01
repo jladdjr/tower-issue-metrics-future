@@ -11,7 +11,7 @@ git_password = ''
 plotly_user = ''
 plotly_api_key = ''
 
-stream_ids=[]  # Removed 7 keys
+stream_ids = []  # Removed 7 keys
 
 # Collect stats, stream data to graph
 print "[Collecting stats]"
