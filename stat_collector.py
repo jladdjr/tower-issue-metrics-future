@@ -9,7 +9,7 @@ class Stat_Collector(object):
         self.git_password = git_password
         self.git_repo = 'ansible/ansible-tower'
         self.milestone_name = 'release_3.1.0'
-        self.significant_priority = ['priority:high', 'priority:medium', 'priority:low']
+        self.significant_priority = ['priority:high', 'priority:medium']
 
         # Issue labels
         self.component_labels = ['component:api', 'component:ui', 'component:installer',
@@ -44,23 +44,22 @@ class Stat_Collector(object):
     def get_issues_by_component(self, dummy_data=False):
         '''Return mapping of component label to count of high and low severity issues'''
         if dummy_data:
-            return {'component:license_server': {'high': 1, 'low': 0},
-                    'component:installer':      {'high': 18, 'low': 3},
-                    'component:ux':             {'high': 7, 'low': 1},
-                    'component:cli':            {'high': 3, 'low': 0},
-                    'component:api':            {'high': 73, 'low': 6},
-                    'component:ui':             {'high': 167, 'low': 13}}
+            return {'component:license_server': 1,
+                    'component:installer':      18,
+                    'component:ux':             7,
+                    'component:cli':            5,
+                    'component:api':            73,
+                    'component:ui':             167}
 
         # Build empty dictionary for statistics
         open_issues_by_component = dict()
-        for label in self.component_labels:                          # FIXME: Dynamically determine labels
-            open_issues_by_component[label] = {'high': 0, 'low': 0}  # Note issue count by severity
+        for label in self.component_labels:  # FIXME: Dynamically determine labels
+            open_issues_by_component[label] = 0
 
         issues = self.get_issues()
         total_issue_count = 0
 
         for issue in issues:
-
             # Filter out pull requests
             if issue.pull_request:
                 # Print progress, ' ' => Skipping Pull Request
@@ -78,20 +77,18 @@ class Stat_Collector(object):
 
             # Determine severity
             # Issues are by default low priority
-            significant_issue = False
             for priority in self.significant_priority:
                 if priority in label_list:
-                    significant_issue = True
                     break
+            else:
+                # Issue severity not significant, skip issue
+                continue
 
             # Add statistic
             # Issue may be included in tally for multiple components
             for label in label_list:
                 if label in self.component_labels:
-                    if significant_issue:
-                        open_issues_by_component[label]['high'] += 1
-                    else:
-                        open_issues_by_component[label]['low'] += 1
+                    open_issues_by_component[label] += 1
 
             # Print progress, '.' => Added new issue
             sys.stdout.write('.')
@@ -140,6 +137,15 @@ class Stat_Collector(object):
             label_list = []
             for label in labels:
                 label_list.append(label.name)
+
+            # Determine severity
+            # Issues are by default low priority
+            for priority in self.significant_priority:
+                if priority in label_list:
+                    break
+            else:
+                # Issue severity not significant, skip issue
+                continue
 
             # Add statistic
             for label in label_list:
