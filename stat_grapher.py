@@ -79,7 +79,7 @@ class Stat_Grapher(object):
         for index in range(num_components):
             x = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
             component = components[index]
-            y = stats[component]['high']
+            y = stats[component]
             streams[index].write(dict(x=x, y=y))
 
         # Close streams
