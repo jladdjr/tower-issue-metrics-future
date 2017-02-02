@@ -16,13 +16,13 @@ class Stat_Grapher(object):
         self.plotly_api_key = plotly_api_key
 
         # Colors will be mapped to streams in order
-        self.colors = ['rgb(135,203,253)',  # Blue
-                       'rgb(108,167,84)',   # Green
-                       'rgb(202,66,45)',    # Red
-                       'rgb(240,193,67)',   # Yellow
-                       'rgb(38,103,212)',   # Dark Blue
-                       'rgb(255,161,59)',   # Orange
-                       'rgb(0,0,0)']        # Black
+        self.colors = ['rgb(195,56,37)',    # Red   (high)
+                       'rgb(33,127,188)',   # Blue  (medium)
+                       'rgb(26,175,93)',    # Green (low)
+                       'rgb(143,63,176)',   # Purple
+                       'rgb(246,158,0))',   # Orange
+                       'rgb(43,61,81)',     # Navy Blue
+                       'rgb(214,84,0)']     # Pumpkin
 
         self.component_tag = 'component:'  # Component prefix (will be stripped on graph legend)
         self.state_tag = 'state:'          # State prefix (will be stripped on graph legend)
