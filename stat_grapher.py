@@ -32,7 +32,7 @@ class Stat_Grapher(object):
         tls.set_credentials_file(username=self.plotly_user, api_key=self.plotly_api_key, stream_ids=plotly_stream_tokens)
         self.stream_tokens = tls.get_credentials_file()['stream_ids']
 
-    def graph_issues_by_component(self, stats, table_title='Tower 3.1: Issues by Component', table_filename='tower_issues_by_component',
+    def graph_issues_by_component(self, stats, table_title='Issues by Component (High/Med)', table_filename='tower_issues_by_component',
                                   maxpoints=60, build_table=False):  # 60 days
         # Confirm there are enough stream ids
         print "Confirm have enough stream ids"
@@ -87,7 +87,7 @@ class Stat_Grapher(object):
         for index in range(num_components):
             streams[index].close()
 
-    def graph_issues_by_state(self, stats, table_title='Tower 3.1: Issues by State', table_filename='tower_issues_by_state',
+    def graph_issues_by_state(self, stats, table_title='Issues by State (High/Med)', table_filename='tower_issues_by_state',
                               maxpoints=60, build_table=False):  # 60 days
         # Confirm there are enough stream ids
         print "Confirm have enough stream ids"
@@ -142,7 +142,7 @@ class Stat_Grapher(object):
         for index in range(num_states):
             streams[index].close()
 
-    def graph_issues_by_priority(self, stats, table_title='Tower 3.1: Issues by Severity', table_filename='tower_issues_by_priority',
+    def graph_issues_by_priority(self, stats, table_title='Issues by Severity', table_filename='tower_issues_by_priority',
                                  maxpoints=60, build_table=False):  # 60 days
         # Confirm there are enough stream ids
         print "Confirm have enough stream ids"
