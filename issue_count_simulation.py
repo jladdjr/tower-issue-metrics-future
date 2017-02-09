@@ -4,6 +4,9 @@ import sqlite3
 from datetime import date, timedelta
 import random
 
+import plotly.plotly as py
+import plotly.graph_objs as go
+
 from stat_collector import Stat_Collector
 
 # Github
@@ -16,9 +19,12 @@ CREATE_TABLE = False
 ADD_TODAYS_ISSUE_COUNT = False
 
 # Monte Carlo
-NUM_SAMPLE_WEEKS = 2       # Simulations will be based on this many weeks of past performance
+NUM_SAMPLE_WEEKS = 3       # Simulations will be based on this many weeks of past performance
 NUM_SIMULATIONS = 100000   # Number of Monte Carlo simulations
-SAMPLE_CEILING = 40        # A given simulation will be cut off after reaching this value
+SAMPLE_CEILING = 60        # A given simulation will be cut off after reaching this value
+
+# Plotly
+PLOTLY_FILENAME = 'monte_carlo'
 
 # Connect to database
 conn = sqlite3.connect(DATABASE_PATH)
@@ -114,7 +120,15 @@ for i in range(SAMPLE_CEILING):
 print "\nCumulative:"
 current_day = date.today()
 total = 0
+x = []
+y = []
 for i in range(SAMPLE_CEILING):
     total += 100.0 * distribution[i] / NUM_SIMULATIONS
+    x.append("{0:%Y-%m-%d}".format(current_day))
+    y.append(total)
     print("{0:%b %d} - {1}".format(current_day, total))
     current_day += day
+
+trace = go.Scatter(x=x, y=y)
+plot_url = py.plot([trace], filename=PLOTLY_FILENAME)
+print "Plot URL: {0}".format(plot_url)
