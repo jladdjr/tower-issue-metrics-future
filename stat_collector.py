@@ -41,6 +41,38 @@ class Stat_Collector(object):
         print "Collect stats"
         return repo.get_issues(milestone=current_milestone)
 
+    def get_count_significant_issues(self):
+        '''Determine number of issues in milestone that are considered to have significant priority'''
+        issues = self.get_issues()
+
+        count = 0
+        for issue in issues:
+            # Filter out pull requests
+            if issue.pull_request:
+                sys.stdout.write('/')
+                sys.stdout.flush()
+                continue
+
+            # Get labels
+            labels = issue.get_labels()
+            label_list = []
+            for label in labels:
+                label_list.append(label.name)
+
+            # Check priority
+            for priority in self.significant_priority:
+                if priority in label_list:
+                    break
+            else:
+                continue
+                sys.stdout.write(' ')
+                sys.stdout.flush()
+            sys.stdout.write('.')
+            sys.stdout.flush()
+            count += 1
+
+        return count
+
     def get_issues_by_component(self, dummy_data=False):
         '''Return mapping of component label to count of high and low severity issues'''
         if dummy_data:
